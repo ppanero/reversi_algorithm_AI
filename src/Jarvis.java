@@ -1,4 +1,6 @@
 import reversi.*;
+
+import java.util.TreeSet;
 import java.util.Vector;
 
 
@@ -62,9 +64,7 @@ public class Jarvis implements ReversiAlgorithm
 
     private Move searchToDepth(int depth)
     {
-
         // - Create the tree of depth d (breadth first, depth first, beam search, alpha beta pruning, ...)
-        createTree(depth);
         // - Evaluate the leaf nodes
         // - If you think normal minimax search is enough, call the propagateScore method of the parent node
         //   of each leaf node
@@ -73,28 +73,36 @@ public class Jarvis implements ReversiAlgorithm
         // - Don't forget the time constraint! -> Stop the algorithm when variable "running" becomes "false"
         //   or when you have reached the maximum search depth.
 
+
         Move optimalMove;
         Vector moves = initialState.getPossibleMoves(myIndex);
+        Vector balance = new Vector<Integer>(moves.capacity());
+        int optimalMoveIndex = 0;
+        int currentBestScore = 0;
 
-        if (moves.size() > 0)
-            optimalMove = (Move)moves.elementAt(0); // Any movement that just happens to be first.
+
+        int numMoves = initialState.getPossibleMoveCount(myIndex);
+
+        if (moves.size() > 0) {
+            for (int i = 0; i < numMoves; ++i) {
+                GameState auxGame = initialState.getNewInstance((Move)moves.elementAt(i));
+                int aux = auxGame.getMarkCount(myIndex) - auxGame.getMarkCount((myIndex + 1)) % 2;
+                balance.add(aux);
+                if(currentBestScore < aux) {
+                    optimalMoveIndex = i;
+                    currentBestScore = aux;
+                }
+            }
+            optimalMove = (Move)moves.elementAt(optimalMoveIndex); // Any movement that just happens to be first.
+        }
         else
             optimalMove = null;
 
         return optimalMove;
     }
 
-    /*private void createTree(int depth) {
-            Node temp_node=null;
-            for(int i=0;i<data.distances.length;i++){
-                temp_node=all_nodes.get(i);
-                for(int j=0;j<data.visibility.length;j++){
-                    if(data.visibility[i][j]==1){
-                        Node temp_node_adj = all_nodes.get(j);
-                        temp_node.addAdjacentNode(temp_node_adj);
-                    }//if
-                }//for
-            }//for
-        }//graph
-    }*/
+
+    private TreeSet<Move> createTree(int depth) {
+        return null;
+    }
 }
