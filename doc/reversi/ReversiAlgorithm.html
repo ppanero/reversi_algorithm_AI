@@ -98,7 +98,7 @@ extends java.lang.Runnable</pre>
   import reversi.*;
   import java.util.Vector;
 
-  public class MyAlgorithm implements ReversiAlgorithm
+  public class Jarvis implements ReversiAlgorithm
   {
       // Constants
       private final static int DEPTH_LIMIT = 6; // Just an example value.
@@ -111,7 +111,7 @@ extends java.lang.Runnable</pre>
       int myIndex;
       Move selectedMove;
 
-      public MyAlgorithm() {} //the constructor
+      public Jarvis() {} //the constructor
       
       public void requestMove(GameController requester)
       {
@@ -127,7 +127,7 @@ extends java.lang.Runnable</pre>
           initialized = true;
       }
 
-      public String getName() { return "MyAlgorithm"; }
+      public String getName() { return "Jarvis"; }
 
       public void cleanup() {}
 
