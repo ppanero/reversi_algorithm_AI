@@ -60,9 +60,11 @@ public class Jarvis implements ReversiAlgorithm
         }
     }
 
-    Move searchToDepth(int depth)
+    private Move searchToDepth(int depth)
     {
+
         // - Create the tree of depth d (breadth first, depth first, beam search, alpha beta pruning, ...)
+        createTree(depth);
         // - Evaluate the leaf nodes
         // - If you think normal minimax search is enough, call the propagateScore method of the parent node
         //   of each leaf node
@@ -81,4 +83,18 @@ public class Jarvis implements ReversiAlgorithm
 
         return optimalMove;
     }
+
+    /*private void createTree(int depth) {
+            Node temp_node=null;
+            for(int i=0;i<data.distances.length;i++){
+                temp_node=all_nodes.get(i);
+                for(int j=0;j<data.visibility.length;j++){
+                    if(data.visibility[i][j]==1){
+                        Node temp_node_adj = all_nodes.get(j);
+                        temp_node.addAdjacentNode(temp_node_adj);
+                    }//if
+                }//for
+            }//for
+        }//graph
+    }*/
 }
