@@ -1,4 +1,6 @@
 import reversi.*;
+
+import java.util.TreeSet;
 import java.util.Vector;
 
 
@@ -62,9 +64,7 @@ public class Jarvis implements ReversiAlgorithm
 
     private Move searchToDepth(int depth)
     {
-
         // - Create the tree of depth d (breadth first, depth first, beam search, alpha beta pruning, ...)
-        createTree(depth);
         // - Evaluate the leaf nodes
         // - If you think normal minimax search is enough, call the propagateScore method of the parent node
         //   of each leaf node
@@ -72,29 +72,33 @@ public class Jarvis implements ReversiAlgorithm
         // - Return the move in the optimal child of the root node
         // - Don't forget the time constraint! -> Stop the algorithm when variable "running" becomes "false"
         //   or when you have reached the maximum search depth.
+        Node parent = new Node();
+        parent.setScore(0);
+        parent.setState(initialState);
+        parent = getNextStage(parent, myIndex, 0, depth);
+        Vector children = parent.getChildren();
 
-        Move optimalMove;
-        Vector moves = initialState.getPossibleMoves(myIndex);
+        for(int i = 0; i < children.size(); ++i){
+            ((Node)children.elementAt(i)).propagateScore();
+        }
 
-        if (moves.size() > 0)
-            optimalMove = (Move)moves.elementAt(0); // Any movement that just happens to be first.
-        else
-            optimalMove = null;
-
-        return optimalMove;
+        return parent.getOptimalChild().getMove();
     }
 
-    /*private void createTree(int depth) {
-            Node temp_node=null;
-            for(int i=0;i<data.distances.length;i++){
-                temp_node=all_nodes.get(i);
-                for(int j=0;j<data.visibility.length;j++){
-                    if(data.visibility[i][j]==1){
-                        Node temp_node_adj = all_nodes.get(j);
-                        temp_node.addAdjacentNode(temp_node_adj);
-                    }//if
-                }//for
-            }//for
-        }//graph
-    }*/
+    private Node getNextStage(Node n, int player, int currentDepth, int maxDepth){
+        if(currentDepth <= maxDepth) {
+            Vector children = n.getState().getPossibleMoves(player);
+            if (children.size() > 0) {
+                for (int j = 0; j < children.size(); ++j) {
+                    Node child = new Node(n.getState().getNewInstance((Move) children.get(j)),
+                            (Move) children.get(j));
+                    child.setScore(n.getState().getMarkCount(myIndex) - n.getState().getMarkCount((myIndex + 1) % 2));
+                    n.addChild(getNextStage(child, (myIndex + 1) % 2, currentDepth++, maxDepth));
+                }
+            } else {
+                n.setScore(n.getState().getMarkCount(myIndex) - n.getState().getMarkCount((myIndex + 1) % 2));
+            }
+        }
+        return n;
+    }
 }
