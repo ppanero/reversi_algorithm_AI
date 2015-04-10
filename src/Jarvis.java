@@ -83,8 +83,19 @@ public class Jarvis implements ReversiAlgorithm
     {
         System.out.println(depth);
         selectedMoveScore = Integer.MIN_VALUE;
-        alphaBetaMinimax(initialState, new Move(0,0,-1), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, myIndex, depth);
-        return selectedMove;
+        Vector<Move> availableMoves = initialState.getPossibleMoves(myIndex);
+        int maxScore = Integer.MIN_VALUE;
+        int bestIndex = 0;
+        if (availableMoves.isEmpty()) return new Move(0,0,-1);
+
+        for (int i = 0; i < availableMoves.size(); ++i) {
+            Move move = availableMoves.elementAt(i);
+            int childScore = alphaBetaMinimax(initialState.getNewInstance(move), move, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, opIndex, depth);
+            if(maxScore < childScore){
+                bestIndex = i;
+            }
+        }
+        return availableMoves.elementAt(bestIndex);
     }
 
     private int alphaBetaMinimax(GameState state, Move m, int alpha, int beta, int depth, int index, int maxDepth){
@@ -99,11 +110,8 @@ public class Jarvis implements ReversiAlgorithm
 
             int maxValue = Integer.MIN_VALUE, minValue = Integer.MAX_VALUE;
 
-
-
             for (int i = 0; i < availableMoves.size(); ++i) {
                 Move move = availableMoves.elementAt(i);
-
 
                 int currentScore = 0;
 
@@ -114,10 +122,6 @@ public class Jarvis implements ReversiAlgorithm
 
                     //Set alpha
                     alpha = Math.max(currentScore, alpha);
-                    if (depth == 0 && maxValue >= selectedMoveScore) {
-                        selectedMove = move;
-                        selectedMoveScore = alpha;
-                    }
                 } else if (index == opIndex) {
 
                     System.out.println(state.getNewInstance(move) + " " + move.toString() + '\n' + alpha + " " + beta + " " + depth + " " +  myIndex);
