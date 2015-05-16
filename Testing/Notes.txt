@@ -1,0 +1,4 @@
+1 : 
+------
+No exceptions.
+But timeout against CheapBlue. Maybe no possible moves.
