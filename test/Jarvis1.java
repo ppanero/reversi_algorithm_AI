@@ -150,8 +150,8 @@ public class Jarvis implements ReversiAlgorithm
 	
     private int alphaBetaMinimax(GameState state, Move m, int alpha, int beta, int depth, int index, int maxDepth)
 	{
-        if(running && depth < maxDepth)
-		//if(depth < maxDepth)
+        //if(running && depth < maxDepth)
+		if(depth < maxDepth)
 		{
             if (beta <= alpha) 
 			{

@@ -218,19 +218,18 @@ public class Jarvis implements ReversiAlgorithm
 		int opMoveCount = state.getPossibleMoveCount(opIndex);
 		int myMarkCount = state.getMarkCount(myIndex);
 		int opMarkCount = state.getMarkCount(opIndex);
-		int positionValue = 0;
-		int coinsParValue = 0;
 		int mobilityValue = 0;
+		
 		
 		//To avoid strategies leading to a state with no possible moves
 		if(myMoveCount == 0)
 			return Integer.MIN_VALUE;
 		
-		positionValue = scoreMatrix[m.getX()][m.getY()];
-		coinsParValue = 1000 * (myMarkCount - opMarkCount ) / (myMarkCount + opMarkCount);
-		mobilityValue = 200 * (myMoveCount - opMoveCount) / (myMoveCount + opMoveCount);		
+		mobilityValue = 200 * (myMoveCount - opMoveCount) / (myMoveCount + opMoveCount);
+		
+		int coinsParity = 1000 * (myMarkCount - opMarkCount ) / (myMarkCount + opMarkCount);
 
-        return positionValue + coinsParValue + mobilityValue;
+        return scoreMatrix[m.getX()][m.getY()] + coinsParity + mobilityValue;
     }
 
 }

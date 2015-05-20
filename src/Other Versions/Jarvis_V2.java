@@ -71,9 +71,7 @@ public class Jarvis implements ReversiAlgorithm
         initialized = false;
         running = true;
         selectedMove = null;
-		System.out.println("---------------------");
         System.out.println("Jarvis searching ....");
-		System.out.println("---------------------");
 
         int currentDepth = 1;
 
@@ -103,7 +101,7 @@ public class Jarvis implements ReversiAlgorithm
 	
     private Move searchToDepth(int depth) 
 	{
-        //System.out.println("Depth : " + depth);
+        //System.out.println(depth);
         selectedMoveScore = Integer.MIN_VALUE;
         Vector<Move> availableMoves = initialState.getPossibleMoves(myIndex);	//all possible moves
         int maxScore = Integer.MIN_VALUE;
@@ -124,13 +122,15 @@ public class Jarvis implements ReversiAlgorithm
 			
 			// Calculate node score based on Alpha-Beta approach
             int childScore = alphaBetaMinimax(initialState.getNewInstance(move), move, Integer.MIN_VALUE, Integer.MAX_VALUE, 1, opIndex, depth);
-			
             // Comparison with maxscore
 			if(maxScore < childScore)
 			{
-				bestIndex = i;
+				// @Pablo : Shouldn't we set childscore to maxscore inside this condition
+                bestIndex = i;
 				maxScore = childScore;
+				//System.out.println(maxScore +" " +depth);
             }
+			//System.out.println(running);
         }
         return availableMoves.elementAt(bestIndex);
     }
@@ -209,28 +209,12 @@ public class Jarvis implements ReversiAlgorithm
 	
     private int calculateScore(Move m, GameState state)
 	{
-		// Score = positional value + coin calue + mobility value
-		// Positional value : Gives higher weights to startegically important positions
-		// Coin value : Parameter for measuring current points on the board 
-		// Mobility value : Parameter to measure possible moves from current state of board
-		
-		int myMoveCount = state.getPossibleMoveCount(myIndex);
-		int opMoveCount = state.getPossibleMoveCount(opIndex);
-		int myMarkCount = state.getMarkCount(myIndex);
-		int opMarkCount = state.getMarkCount(opIndex);
-		int positionValue = 0;
-		int coinsParValue = 0;
-		int mobilityValue = 0;
-		
-		//To avoid strategies leading to a state with no possible moves
-		if(myMoveCount == 0)
+		// Return weight of the move position
+		if(state.getPossibleMoves(myIndex).isEmpty())
 			return Integer.MIN_VALUE;
-		
-		positionValue = scoreMatrix[m.getX()][m.getY()];
-		coinsParValue = 1000 * (myMarkCount - opMarkCount ) / (myMarkCount + opMarkCount);
-		mobilityValue = 200 * (myMoveCount - opMoveCount) / (myMoveCount + opMoveCount);		
+		int coinsParity = 1000 * (state.getMarkCount(myIndex) - state.getMarkCount(opIndex) ) / (state.getMarkCount(myIndex) + state.getMarkCount(opIndex));
 
-        return positionValue + coinsParValue + mobilityValue;
+        return scoreMatrix[m.getX()][m.getY()] + coinsParity;
     }
 
 }

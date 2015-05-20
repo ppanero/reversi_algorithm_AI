@@ -2,3 +2,12 @@
 ------
 No exceptions.
 But timeout against CheapBlue. Maybe no possible moves.
+
+
+
+2:
+-----
+Final version
+No exceptions.
+Beats LousyBlue 4-0 (Kick ass :D )
+Loses to CheapBlue 0-4
