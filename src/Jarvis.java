@@ -1,6 +1,4 @@
 import reversi.*;
-
-import java.util.TreeSet;
 import java.util.Vector;
 
 
@@ -146,7 +144,8 @@ public class Jarvis implements ReversiAlgorithm
 
 	// Alpha - Beta function
 	
-	//@Pablo : Copy paste the alpha-beta pseudocode you used here. Maybe add the link as well (if you have)
+	// Pseudocode http://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning#Pseudocode
+    // The previous pseudocode was adapted but not strictly followed (different parameters e.g. depth limit, etc.)
 	
     private int alphaBetaMinimax(GameState state, Move m, int alpha, int beta, int depth, int index, int maxDepth)
 	{
@@ -209,7 +208,7 @@ public class Jarvis implements ReversiAlgorithm
 	
     private int calculateScore(Move m, GameState state)
 	{
-		// Score = positional value + coin calue + mobility value
+		// Score = positional value + coin value + mobility value
 		// Positional value : Gives higher weights to startegically important positions
 		// Coin value : Parameter for measuring current points on the board 
 		// Mobility value : Parameter to measure possible moves from current state of board
